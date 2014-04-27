@@ -42,7 +42,7 @@ public class Connection
 	}
 	public String toString()
 	{
-		return "Connected with " + connectionSocket.getInetAddress() + ":" + connectionSocket.getLocalPort();
+		return " connected with server from " + connectionSocket.getInetAddress() + ":" + connectionSocket.getLocalPort();
 	}
 	private	void write(String sended)
 	{

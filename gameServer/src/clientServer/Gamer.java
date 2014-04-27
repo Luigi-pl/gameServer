@@ -41,7 +41,7 @@ public class Gamer
 	}
 	@Override
 	public String toString() {
-		return "("+login+")";
+		return login;
 	}
 	
 	
