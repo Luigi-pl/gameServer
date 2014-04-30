@@ -52,8 +52,65 @@ public class DatabaseConnection
 		{
 			e.printStackTrace();
 		}
-		
 		return gamer;
+	}
+	public String getUpdateInfo()
+	{
+		String s;
+		try 
+		{
+			s="";
+			Statement sql_stmt = conn.createStatement();
+			ResultSet rset = sql_stmt.executeQuery("SELECT STATE FROM UPDATE_info ORDER BY ID_NUMBER ASC");
+			while (rset.next())
+			{
+				s=s+rset.getString("state");
+			}
+			rset.close();
+			sql_stmt.close();
+			//System.out.println(s);
+			return s;
+		} 
+		catch (SQLException e) 
+		{
+			
+			e.printStackTrace();
+			return "";
+		}
+	}
+	public String getFileUpdatePath(int idNumber)
+	{
+		String path;
+		String file_name;
+		String ret;
+		try 
+		{
+			path="";
+			file_name="";
+			ret="";
+			Statement sql_stmt = conn.createStatement();
+			ResultSet rset = sql_stmt.executeQuery("SELECT PATH, FILe_name FROM FILE_UPDATE WHERE ID_NUMBER='"+ idNumber +"'");
+			rset.next();
+			path=rset.getString("path");
+			file_name=rset.getString("file_name");
+			if(path!=null)
+			{
+				ret=path+"\\"+file_name;
+			}
+			else
+			{
+				ret=file_name;
+			}
+			rset.close();
+			sql_stmt.close();
+			return ret;
+		} 
+		catch (SQLException e) 
+		{
+			
+			e.printStackTrace();
+			return "";
+		}
 	}
 	public void close()
 	{

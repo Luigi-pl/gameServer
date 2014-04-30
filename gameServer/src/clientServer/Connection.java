@@ -3,6 +3,8 @@ package clientServer;
 import java.net.*;
 import java.io.*;
 
+import main.*;
+
 public class Connection
 {
 	private Socket connectionSocket;
@@ -47,6 +49,11 @@ public class Connection
 		gamer.setLogin(read());
 		gamer.setPassword(read());
 		return gamer;
+	}
+	public void launcherRequestForUpdate(Update update)
+	{
+		String launcherState=read();
+		//dalsza czesc wysylanie plikow do update'a
 	}
 	public String toString()
 	{
