@@ -14,13 +14,22 @@ public class Main {
 
 	public static void main(String[] args) throws IOException
 	{
+		String login;
+		String password;
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		login = br.readLine();
+		password = br.readLine();
+		
+		DatabaseConnection databaseConnection = new DatabaseConnection(login, password);
+		System.out.println("DB - polaczono");
+		
 		ExecutorService executor = Executors.newFixedThreadPool(10);
 		ServerSocket welcomeSocket = new ServerSocket(2400);
 		
-		for(int i=0; i<1; i++)
+		for(int i=0; i<12; i++)
 		{
 			Socket connectionSocket = welcomeSocket.accept();
-			Runnable logic = new Logic(connectionSocket);
+			Runnable logic = new Logic(connectionSocket, databaseConnection);
 			executor.execute(logic);	
 			
 		}

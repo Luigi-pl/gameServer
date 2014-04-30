@@ -14,6 +14,7 @@ public class Gamer
 	{
 		this.login=login;
 		this.password=password;
+		this.gID=0;
 	}
 	public int getgID() 
 	{
@@ -40,11 +41,20 @@ public class Gamer
 		this.password = password;
 	}
 	@Override
-	public String toString() {
-		return login;
+	public String toString() 
+	{
+		return gID + ": " + login + " " + password;
 	}
 	
-	
-	
-
+	public String checkGID()
+	{
+		if(gID!=0)
+		{
+			return "T";
+		}
+		else
+		{
+			return "N";
+		}
+	}
 }

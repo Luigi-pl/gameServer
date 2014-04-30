@@ -8,8 +8,10 @@ public class Connection
 	private Socket connectionSocket;
 	private BufferedReader inFromClient;
 	private DataOutputStream outToClient;
+	private boolean state;
 	public Connection(Socket connectionSocket) 
 	{
+		state=true;
 		this.connectionSocket=connectionSocket;
 		try 
 		{
@@ -18,6 +20,7 @@ public class Connection
 		} 
 		catch (IOException e) 
 		{
+			state=false;
 			e.printStackTrace();
 		}
 	}	
@@ -29,13 +32,18 @@ public class Connection
 		} 
 		catch (IOException e) 
 		{
+			state=false;
 			e.printStackTrace();
 			return "";
 		}
 	}
-	public Gamer readGamer()
+	public String readCommand()
 	{
-		Gamer gamer = new Gamer();
+		String command=read();
+		return command;
+	}
+	public Gamer readGamer(Gamer gamer)
+	{
 		gamer.setLogin(read());
 		gamer.setPassword(read());
 		return gamer;
@@ -48,21 +56,34 @@ public class Connection
 	{
 		try 
 		{
-			outToClient.writeChars(sended);
+			outToClient.writeBytes(sended);
 		} 
 		catch (IOException e) 
 		{
+			state=false;
 			e.printStackTrace();
 		}
 	}
+	public void writerGamerState(String state)
+	{
+		write(state);
+	}
 	public void close()
 	{
-		try {
+		try 
+		{
+			state=false;
 			connectionSocket.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (IOException e) 
+		{
+			state=false;
 			e.printStackTrace();
 		}	
+	}
+	public boolean state()
+	{
+		return state;
 	}
 
 }
