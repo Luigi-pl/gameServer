@@ -33,16 +33,6 @@ public class DatabaseConnection
 		{
 			e.printStackTrace();
 		}
-		/*
-	
-		ResultSet rset = sql_stmt.executeQuery("SELECT * FROM Filmy");
-	
-		while (rset.next())
-		{
-			System.out.println(rset.getString("tytul"));
-		}
-  
-		rset.close();*/
 	}
 	public Gamer setGamerGID(Gamer gamer)
 	{

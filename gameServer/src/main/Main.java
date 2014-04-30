@@ -21,6 +21,8 @@ public class Main {
 		password = br.readLine();
 		
 		DatabaseConnection databaseConnection = new DatabaseConnection(login, password);
+		login="";
+		password="";
 		System.out.println("DB - polaczono");
 		
 		ExecutorService executor = Executors.newFixedThreadPool(10);
