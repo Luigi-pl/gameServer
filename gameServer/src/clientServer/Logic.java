@@ -10,7 +10,6 @@ public class Logic implements Runnable
 	private Connection connection;
 	private DatabaseConnection dbConnection;
 	private String command;
-	@SuppressWarnings("unused")
 	private Update update;
 	public Logic(Socket connectionSocket, DatabaseConnection databaseConnection, Update update)
 	{
@@ -24,18 +23,26 @@ public class Logic implements Runnable
 		do
 		{
 			command=connection.readCommand();
-			
-			if(command.equals("SLN"))
+			//System.out.println(command);
+			if(command == null)
+			{
+				break;
+			}
+			else if(command.equals("SLN"))	//obsluga logowania
 			{
 				gamer = connection.readGamer(gamer);
 				gamer=dbConnection.setGamerGID(gamer);
 				connection.writerGamerState(gamer.checkGID());
 			}
-			else if(command.equals("RUF"))
+			else if(command.equals("RUI"))	//obsluga informacji o plikach do zupdate'owania
+			{
+				connection.launcherRequestForUpdate(update);
+			}
+			else if(command.equals("RUF"))	//obsluga przesylania plikow do update - do przemyslenia
 			{
 				
 			}
-			else if(command.equals("LGT"))
+			else if(command.equals("LGT"))	//wylogowanie
 			{
 				break;
 			}			

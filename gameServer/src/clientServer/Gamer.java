@@ -45,7 +45,6 @@ public class Gamer
 	{
 		return gID + ": " + login + " " + password;
 	}
-	
 	public String checkGID()
 	{
 		if(gID!=0)

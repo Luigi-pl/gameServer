@@ -14,6 +14,7 @@ import clientServer.Gamer;
 public class DatabaseConnection 
 {
 	Connection conn;
+	
 	public DatabaseConnection(String login, String password) 
 	{
 		try 
@@ -34,6 +35,19 @@ public class DatabaseConnection
 			e.printStackTrace();
 		}
 	}
+	public void close()
+	{
+		try 
+		{
+			
+			conn.close();
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	public Gamer setGamerGID(Gamer gamer)
 	{
 		String s;
@@ -50,10 +64,11 @@ public class DatabaseConnection
 		} 
 		catch (SQLException e) 
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return gamer;
 	}
+	
 	public String getUpdateInfo()
 	{
 		String s;
@@ -73,12 +88,11 @@ public class DatabaseConnection
 		} 
 		catch (SQLException e) 
 		{
-			
 			e.printStackTrace();
 			return "";
 		}
 	}
-	public String getFileUpdatePath(int idNumber)
+	public String getFileUpdatePath(int idNumber, String system)
 	{
 		String path;
 		String file_name;
@@ -89,7 +103,7 @@ public class DatabaseConnection
 			file_name="";
 			ret="";
 			Statement sql_stmt = conn.createStatement();
-			ResultSet rset = sql_stmt.executeQuery("SELECT PATH, FILe_name FROM FILE_UPDATE WHERE ID_NUMBER='"+ idNumber +"'");
+			ResultSet rset = sql_stmt.executeQuery("SELECT PATH, FILe_name FROM FILE_UPDATE_"+system+" WHERE ID_NUMBER='"+ idNumber +"'");
 			rset.next();
 			path=rset.getString("path");
 			file_name=rset.getString("file_name");
@@ -112,17 +126,6 @@ public class DatabaseConnection
 			return "";
 		}
 	}
-	public void close()
-	{
-		try 
-		{
-			
-			conn.close();
-		} 
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		}
-	}
+	
 	
 }

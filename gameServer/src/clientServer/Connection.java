@@ -39,31 +39,11 @@ public class Connection
 			return "";
 		}
 	}
-	public String readCommand()
-	{
-		String command=read();
-		return command;
-	}
-	public Gamer readGamer(Gamer gamer)
-	{
-		gamer.setLogin(read());
-		gamer.setPassword(read());
-		return gamer;
-	}
-	public void launcherRequestForUpdate(Update update)
-	{
-		String launcherState=read();
-		//dalsza czesc wysylanie plikow do update'a
-	}
-	public String toString()
-	{
-		return " connected with server from " + connectionSocket.getInetAddress() + ":" + connectionSocket.getLocalPort();
-	}
-	private	void write(String sended)
+	private	void write(String send)
 	{
 		try 
 		{
-			outToClient.writeBytes(sended);
+			outToClient.writeBytes(send);
 		} 
 		catch (IOException e) 
 		{
@@ -71,9 +51,40 @@ public class Connection
 			e.printStackTrace();
 		}
 	}
-	public void writerGamerState(String state)
+	private void writeText(String send, int size)
 	{
-		write(state);
+		String sendLength;
+		if(size<10)
+		{
+			sendLength = "000" + (new Integer(size)).toString();
+		}
+		else if(size<100)
+		{
+			sendLength = "00" + (new Integer(size)).toString();
+		}
+		else if(size<1000)
+		{
+			sendLength = "0" + (new Integer(size)).toString();
+		}
+		else
+		{
+			sendLength = (new Integer(size)).toString();
+		}
+		write(sendLength);
+		write(send);
+	}
+	public String toString()
+	{
+		return " connected with server from " + connectionSocket.getInetAddress() + ":" + connectionSocket.getLocalPort();
+	}
+	public String readCommand()
+	{
+		String command=read();
+		return command;
+	}
+	public boolean state()
+	{
+		return state;
 	}
 	public void close()
 	{
@@ -88,9 +99,57 @@ public class Connection
 			e.printStackTrace();
 		}	
 	}
-	public boolean state()
+	
+	
+	
+	public Gamer readGamer(Gamer gamer)
 	{
-		return state;
+		gamer.setLogin(read());
+		gamer.setPassword(read());
+		return gamer;
+	}
+	public void writerGamerState(String state)
+	{
+		write(state);
+	}
+	
+	
+	public void launcherRequestForUpdate(Update update)
+	{
+		
+		String launcherState=read();
+		String serverState=update.getUpdateInfo();
+		
+		String launcher;
+		String game;
+		String fileToUpdate="";
+		int i;
+		for(i=0; i<serverState.length(); i++)
+		{
+			game=Character.toString(serverState.charAt(i));
+			try
+			{
+				launcher=Character.toString(launcherState.charAt(i));
+			}
+			catch(Exception e)
+			{
+				launcher=null;
+			}
+			
+			if(launcher!=null && !game.equals(launcher))
+			{
+				fileToUpdate=fileToUpdate+"1";
+			}
+			else if(launcher==null)
+			{
+				fileToUpdate=fileToUpdate+"1";
+			}
+			else
+			{
+				fileToUpdate=fileToUpdate+"0";
+			}
+		}
+		writeText(fileToUpdate, fileToUpdate.length());
 	}
 
 }

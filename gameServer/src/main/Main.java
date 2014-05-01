@@ -46,8 +46,6 @@ public class Main {
 		
 		
 		System.out.println("OCZEKIWANIE POLACZEN");
-		System.out.println("");
-		System.out.println("");
 		for(int i=0; i<12; i++)
 		{
 			Socket connectionSocket = welcomeSocket.accept();
@@ -55,9 +53,16 @@ public class Main {
 			executor.execute(logic);	
 			
 		}
+		//Zamykanie sokcetu nasluchujacego
 		welcomeSocket.close();
-		executor.shutdown();
+		System.out.println("SOCKET AKCEPTUJACY - Zamkniety");
+		//
 		
+		//Wylaczenie executora
+		executor.shutdown();
+		System.out.println("EXECUTOR - WYLACZONY");
+		//
+		System.out.println("ZAMYKANIE - ZAKONCZONE");
 	}
 
 }
