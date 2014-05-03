@@ -104,6 +104,7 @@ public class Connection
 	
 	public Gamer readGamer(Gamer gamer)
 	{
+		
 		gamer.setLogin(read());
 		gamer.setPassword(read());
 		return gamer;

@@ -30,9 +30,9 @@ public class Logic implements Runnable
 			}
 			else if(command.equals("SLN"))	//obsluga logowania
 			{
-				gamer = connection.readGamer(gamer);
-				gamer=dbConnection.setGamerGID(gamer);
-				connection.writerGamerState(gamer.checkGID());
+				gamer = connection.readGamer(gamer);	//pobranie informacji wyslanych przez gracza
+				gamer=dbConnection.setGamerGID(gamer);	//odnalezienie gracza w bazie
+				connection.writerGamerState(gamer.checkGID());	//wyslanie graczowi jego gid
 			}
 			else if(command.equals("RUI"))	//obsluga informacji o plikach do zupdate'owania
 			{
