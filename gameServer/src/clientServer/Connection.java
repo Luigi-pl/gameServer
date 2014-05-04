@@ -5,12 +5,15 @@ import java.io.*;
 
 import main.*;
 
+/**Klasa odpowiedzialna za lacznosc miedzy klientem a serwerem*/
 public class Connection
 {
 	private Socket connectionSocket;
 	private BufferedReader inFromClient;
 	private DataOutputStream outToClient;
 	private boolean state;
+	
+	/**Metoda odpowiedzalna za stworzenie polaczenia z klientem*/
 	public Connection(Socket connectionSocket) 
 	{
 		state=true;
@@ -26,6 +29,8 @@ public class Connection
 			e.printStackTrace();
 		}
 	}	
+	
+	/**Metoda odpowiedzalna za odebraniem od klienta jednej linii tekstu*/
 	private String read()
 	{
 		try 
@@ -39,6 +44,8 @@ public class Connection
 			return "";
 		}
 	}
+	/**Metoda odpowiedzialna za wyslanie tekstu do klienta
+	 * @param send tekst do wyslania*/
 	private	void write(String send)
 	{
 		try 
@@ -51,6 +58,10 @@ public class Connection
 			e.printStackTrace();
 		}
 	}
+	
+	/**Metoda odpowiedzialna za wyslanie tekstu o okreslonej dlugosc do klienta
+	 * @param send tekst do wyslania
+	 * @param size dlugosc tekstu*/
 	private void writeText(String send, int size)
 	{
 		String sendLength;
@@ -77,15 +88,18 @@ public class Connection
 	{
 		return " connected with server from " + connectionSocket.getInetAddress() + ":" + connectionSocket.getLocalPort();
 	}
+	/**Metoda odpowiedzialna za wczytanie komendy wyslana przez klienta*/
 	public String readCommand()
 	{
 		String command=read();
 		return command;
 	}
+	/**Metoda odpowiedzialna za zwrocenie stanu polaczenia*/
 	public boolean state()
 	{
 		return state;
 	}
+	/**Metoda odpowiedzialna za zamkniecie polaczenia*/
 	public void close()
 	{
 		try 
@@ -100,8 +114,7 @@ public class Connection
 		}	
 	}
 	
-	
-	
+	/**Metoda odpowiedzialna za wczytanie danych o graczu od klienta*/
 	public Gamer readGamer(Gamer gamer)
 	{
 		
@@ -109,12 +122,13 @@ public class Connection
 		gamer.setPassword(read());
 		return gamer;
 	}
-	public void writerGamerState(String state)
+	/**Metoda odpowiedzialna za wyslanie informacji do klienta o tym czy dany gracz poprawnie sie zalogowal*/
+	public void writerGamerState(Gamer gamer)
 	{
-		write(state);
+		write(gamer.checkGID());
 	}
 	
-	
+	/**Metoda odpowiedzialna za wyslanie informacji do klienta o tym, ktore pliki musza zostac przez niego pobrane*/
 	public void launcherRequestForUpdate(Update update)
 	{
 		

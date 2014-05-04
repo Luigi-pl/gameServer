@@ -32,7 +32,7 @@ public class Logic implements Runnable
 			{
 				gamer = connection.readGamer(gamer);	//pobranie informacji wyslanych przez gracza
 				gamer=dbConnection.setGamerGID(gamer);	//odnalezienie gracza w bazie
-				connection.writerGamerState(gamer.checkGID());	//wyslanie graczowi jego gid
+				connection.writerGamerState(gamer);	//wyslanie graczowi jego gid
 			}
 			else if(command.equals("RUI"))	//obsluga informacji o plikach do zupdate'owania
 			{
