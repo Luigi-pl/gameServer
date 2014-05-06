@@ -23,7 +23,6 @@ public class Logic implements Runnable
 		do
 		{
 			command=connection.readCommand();
-			//System.out.println(command);
 			if(command == null)
 			{
 				break;
@@ -40,7 +39,8 @@ public class Logic implements Runnable
 			}
 			else if(command.equals("RUF"))	//obsluga przesylania plikow do update - do przemyslenia
 			{
-				
+				String os = connection.readOS();
+				connection.launcherRequestForFile(update, os);
 			}
 			else if(command.equals("LGT"))	//wylogowanie
 			{

@@ -125,12 +125,11 @@ public class DatabaseConnection
 			}
 			rset.close();
 			sql_stmt.close();
-			System.out.println(ret);
+			
 			return ret;
 		} 
 		catch (SQLException e) 
 		{
-			
 			e.printStackTrace();
 			return "";
 		}

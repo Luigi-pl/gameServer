@@ -67,13 +67,33 @@ public class Connection
 		String sendLength;
 		if(size<10)
 		{
-			sendLength = "000" + (new Integer(size)).toString();
+			sendLength = "00000000" + (new Integer(size)).toString();
 		}
 		else if(size<100)
 		{
-			sendLength = "00" + (new Integer(size)).toString();
+			sendLength = "0000000" + (new Integer(size)).toString();
 		}
 		else if(size<1000)
+		{
+			sendLength = "000000" + (new Integer(size)).toString();
+		}
+		else if(size<10000)
+		{
+			sendLength = "00000" + (new Integer(size)).toString();
+		}
+		else if(size<100000)
+		{
+			sendLength = "0000" + (new Integer(size)).toString();
+		}
+		else if(size<1000000)
+		{
+			sendLength = "000" + (new Integer(size)).toString();
+		}
+		else if(size<10000000)
+		{
+			sendLength = "00" + (new Integer(size)).toString();
+		}
+		else if(size<100000000)
 		{
 			sendLength = "0" + (new Integer(size)).toString();
 		}
@@ -91,8 +111,12 @@ public class Connection
 	/**Metoda odpowiedzialna za wczytanie komendy wyslana przez klienta*/
 	public String readCommand()
 	{
-		String command=read();
-		return command;
+		return read();
+	}
+	/**Metoda odpowiedzialna za pobranie od klienta informacji o systemie*/
+	public String readOS()
+	{
+		return read();
 	}
 	/**Metoda odpowiedzialna za zwrocenie stanu polaczenia*/
 	public boolean state()
@@ -165,6 +189,19 @@ public class Connection
 			}
 		}
 		writeText(fileToUpdate, fileToUpdate.length());
+	}
+	/**Metoda odpowiedzialna za przesylanie kolejnych plikow*/
+	public void launcherRequestForFile(Update update, String os)
+	{
+		int num;
+		String number=read();
+		while(!number.equals("X"))
+		{
+			num = Integer.parseInt(number);
+			String fileAndPath = update.getFileUpdatePathWin(num, os);
+			writeText(fileAndPath,fileAndPath.length());
+			/*otwarcie pliku i wyslanie go*/
+		}
 	}
 
 }

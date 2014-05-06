@@ -21,7 +21,7 @@ public class Update
 		filesUpdatePathWin = new ArrayList<String>(updateInfo.length());
 		filesUpdatePathLin = new ArrayList<String>(updateInfo.length());
 		
-		for(int i=1; i<updateInfo.length(); i++)
+		for(int i=1; i<=updateInfo.length(); i++)
 		{
 			filesUpdatePathWin.add(dbConnection.getFileUpdatePath(i, "WIN"));
 			filesUpdatePathLin.add(dbConnection.getFileUpdatePath(i, "LIN"));
