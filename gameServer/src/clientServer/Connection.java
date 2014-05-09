@@ -59,10 +59,8 @@ public class Connection
 		}
 	}
 	
-	/**Metoda odpowiedzialna za wyslanie tekstu o okreslonej dlugosc do klienta
-	 * @param send tekst do wyslania
-	 * @param size dlugosc tekstu*/
-	private void writeText(String send, int size)
+	/**Metoda odpowiedzialna za wysylanie liczb*/
+	private void writeSize(int size)
 	{
 		String sendLength;
 		if(size<10)
@@ -102,6 +100,14 @@ public class Connection
 			sendLength = (new Integer(size)).toString();
 		}
 		write(sendLength);
+	}
+	
+	/**Metoda odpowiedzialna za wyslanie tekstu o okreslonej dlugosc do klienta
+	 * @param send tekst do wyslania
+	 * @param size dlugosc tekstu*/
+	private void writeText(String send, int size)
+	{
+		writeSize(size);
 		write(send);
 	}
 	public String toString()
@@ -193,6 +199,8 @@ public class Connection
 	/**Metoda odpowiedzialna za przesylanie kolejnych plikow*/
 	public void launcherRequestForFile(Update update, String os)
 	{
+		
+		
 		int num;
 		String number=read();
 		while(!number.equals("X"))
@@ -201,7 +209,47 @@ public class Connection
 			String fileAndPath = update.getFileUpdatePathWin(num, os);
 			writeText(fileAndPath,fileAndPath.length());
 			/*otwarcie pliku i wyslanie go*/
+			sendFile(fileAndPath);
+			number=read();			
 		}
 	}
-
+	private void sendFile(String nameAndPath)
+	{
+		FileInputStream fis = null;
+	    BufferedInputStream bis = null;
+	    OutputStream oS = null;
+	    
+		File file = new File(nameAndPath);	
+		
+		writeSize((int)file.length());
+		
+		byte [] mybytearray  = new byte [(int)file.length()];
+		
+		
+		System.out.println(file.length() + " " + file.getAbsolutePath());
+		
+		try 
+		{
+			fis = new FileInputStream(file);
+		} 
+		catch (FileNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
+		
+        bis = new BufferedInputStream(fis);
+        try 
+        {
+			bis.read(mybytearray,0,mybytearray.length);
+			oS = connectionSocket.getOutputStream();
+			oS.write(mybytearray,0,mybytearray.length);
+	        oS.flush();
+	        
+	        bis.close();
+		} 
+        catch (IOException e) 
+        {
+			e.printStackTrace();
+		}
+	}
 }

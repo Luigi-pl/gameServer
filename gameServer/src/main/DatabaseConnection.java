@@ -117,7 +117,7 @@ public class DatabaseConnection
 			file_name=rset.getString("file_name");
 			if(path!=null)
 			{
-				ret=path+"\\"+file_name;
+				ret=path+"/"+file_name;
 			}
 			else
 			{
