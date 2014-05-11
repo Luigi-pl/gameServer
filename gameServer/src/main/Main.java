@@ -46,7 +46,7 @@ public class Main {
 		
 		
 		System.out.println("OCZEKIWANIE POLACZEN");
-		for(int i=0; i<12; i++)
+		for(int i=0; i<100; i++)
 		{
 			Socket connectionSocket = welcomeSocket.accept();
 			Runnable logic = new Logic(connectionSocket, databaseConnection, update);
