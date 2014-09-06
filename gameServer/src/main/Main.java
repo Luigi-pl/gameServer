@@ -54,7 +54,7 @@ public class Main {
 		for(int i=0; i<100; i++)
 		{
 			Socket connectionSocket = welcomeSocket.accept();
-			Runnable logic = new Logic(connectionSocket, databaseConnection, update);
+			Runnable logic = new Logic(connectionSocket, databaseConnection, update, dataStorage);
 			executor.execute(logic);	
 			
 		}

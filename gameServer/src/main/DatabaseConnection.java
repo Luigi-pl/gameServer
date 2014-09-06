@@ -140,6 +140,24 @@ public class DatabaseConnection
 			return "";
 		}
 	}
-	
-	
+	public Gamer setResearch(Gamer gamer)
+	{
+		try 
+		{
+			Statement sql_stmt = conn.createStatement();
+			ResultSet rset = sql_stmt.executeQuery("SELECT SHIPS_SIZE, MISSILE, ION_CANNON, PLASMA_GUN, ARMOR, SHIELD, ECM, ECCM, RFLEET FROM GAMERS WHERE GID="+gamer.getgID());
+			rset.next();
+			String research = rset.getString("SHIPS_SIZE") +
+					rset.getString("MISSILE") + rset.getString("ION_CANNON") + rset.getString("PLASMA_GUN") + 
+					rset.getString("ARMOR") + rset.getString("SHIELD") + 
+					rset.getString("ECM") + rset.getString("ECCM") +
+					rset.getString("RFLEET");
+			gamer.setResearch(research);
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		return gamer;
+	}
 }

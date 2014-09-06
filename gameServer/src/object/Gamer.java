@@ -5,6 +5,7 @@ public class Gamer
 	private int gID;
 	private String login;
 	private String password;
+	private GamerResearch research;
 	
 	public Gamer() 
 	{
@@ -64,5 +65,10 @@ public class Gamer
 		{
 			return "N";
 		}
+	}
+	/** */
+	public void setResearch(String research)
+	{
+		this.research = new GamerResearch(research);
 	}
 }

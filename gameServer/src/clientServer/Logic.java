@@ -2,6 +2,8 @@ package clientServer;
 
 import java.net.Socket;
 
+import data.DataStorage;
+
 import object.Gamer;
 
 import main.*;
@@ -13,12 +15,14 @@ public class Logic implements Runnable
 	private DatabaseConnection dbConnection;
 	private String command;
 	private Update update;
-	public Logic(Socket connectionSocket, DatabaseConnection databaseConnection, Update update)
+	private DataStorage dataStorage;
+	public Logic(Socket connectionSocket, DatabaseConnection databaseConnection, Update update, DataStorage dataStorage)
 	{
 		connection = new Connection(connectionSocket);		
 		this.dbConnection = databaseConnection;
 		gamer = new Gamer();
 		this.update = update;
+		this.dataStorage=dataStorage;
 	}
 	public void run()
 	{
@@ -34,12 +38,13 @@ public class Logic implements Runnable
 				gamer = connection.readGamer(gamer);	//pobranie informacji wyslanych przez gracza
 				gamer = dbConnection.setGamerGID(gamer);	//odnalezienie gracza w bazie
 				connection.writerGamerState(gamer);	//wyslanie graczowi informacji o powodzeniu logowania
+				gamer = dbConnection.setResearch(gamer); //
 			}
 			else if(command.equals("RUI"))	//obsluga informacji o plikach do zupdate'owania
 			{
 				connection.launcherRequestForUpdate(update);
 			}
-			else if(command.equals("RUF"))	//obsluga przesylania plikow do update - do przemyslenia
+			else if(command.equals("RUF"))	//obsluga przesylania plikow do update
 			{
 				String os = connection.readOS();
 				connection.launcherRequestForFile(update, os);
