@@ -2,6 +2,8 @@ package clientServer;
 
 import java.net.Socket;
 
+import object.Gamer;
+
 import main.*;
 
 public class Logic implements Runnable
@@ -31,7 +33,7 @@ public class Logic implements Runnable
 			{
 				gamer = connection.readGamer(gamer);	//pobranie informacji wyslanych przez gracza
 				gamer = dbConnection.setGamerGID(gamer);	//odnalezienie gracza w bazie
-				connection.writerGamerState(gamer);	//wyslanie graczowi jego gid
+				connection.writerGamerState(gamer);	//wyslanie graczowi informacji o powodzeniu logowania
 			}
 			else if(command.equals("RUI"))	//obsluga informacji o plikach do zupdate'owania
 			{

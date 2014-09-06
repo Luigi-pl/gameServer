@@ -6,7 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import clientServer.Gamer;
+import object.Gamer;
+
 
 //import org.h2.jdbcx.JdbcDataSource;
 
@@ -24,16 +25,9 @@ public class DatabaseConnection
 	{
 		try 
 		{
-			/*JdbcDataSource ds = new JdbcDataSource();
-			ds.setURL("jdbc:h2:˜/test");
-			ds.setUser("sa");
-			ds.setPassword("sa");*/
-			//Class.forName("org.hsqldb.jdbcDriver").newInstance();
-			//DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			//Class.forName("org.h2.Driver").newInstance();
-			//conn =  DriverManager.getConnection("jdbc:oracle:thin:@localhost:9000:ORA2013", login, password);
+			String localization = System.getProperty("user.dir")+System.getProperty("file.separator")+"test";
 			DriverManager.registerDriver(new org.h2.Driver());
-			conn = DriverManager.getConnection("jdbc:h2:/home/luigi/Projekt/test", login, password);
+			conn = DriverManager.getConnection("jdbc:h2:"+localization, login, password);
 		} 
 		catch (Exception e) 
 		{

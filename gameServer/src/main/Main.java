@@ -8,12 +8,17 @@ import clientServer.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import data.DataStorage;
+
 //import clientServer.Connection;
 
 public class Main {
 
 	public static void main(String[] args) throws IOException
 	{
+		//ladowanie informacji o obiektach
+		DataStorage dataStorage = new DataStorage();
+		
 		//pobieranie loginu i hasla, zeby stworzyc polaczenie z baza danych
 		String login;
 		String password;

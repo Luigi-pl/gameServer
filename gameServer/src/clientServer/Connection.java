@@ -3,6 +3,8 @@ package clientServer;
 import java.net.*;
 import java.io.*;
 
+import object.Gamer;
+
 import main.*;
 
 /**Klasa odpowiedzialna za lacznosc miedzy klientem a serwerem*/
@@ -147,7 +149,6 @@ public class Connection
 	/**Metoda odpowiedzialna za wczytanie danych o graczu od klienta*/
 	public Gamer readGamer(Gamer gamer)
 	{
-		
 		gamer.setLogin(read());
 		gamer.setPassword(read());
 		return gamer;

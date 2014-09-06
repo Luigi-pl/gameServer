@@ -1,4 +1,4 @@
-package clientServer;
+package object;
 
 public class Gamer 
 {
@@ -6,11 +6,13 @@ public class Gamer
 	private String login;
 	private String password;
 	
-	Gamer()
+	public Gamer() 
 	{
-		
+		this.login="";
+		this.password="";
+		this.gID=0;
 	}
-	Gamer(String login, String password)
+	public Gamer(String login, String password)
 	{
 		this.login=login;
 		this.password=password;
