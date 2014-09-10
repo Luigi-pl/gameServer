@@ -2,11 +2,17 @@ package main;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.Date;
+
+import data.DataStorage;
 
 import object.Gamer;
+import object.GamerResearch;;
 
 
 //import org.h2.jdbcx.JdbcDataSource;
@@ -63,6 +69,7 @@ public class DatabaseConnection
 			s="SELECT gid FROM gamers WHERE LOGIN='" + gamer.getLogin() + "' and PASS='" + gamer.getPassword() + "'";
 			ResultSet rset = sql_stmt.executeQuery(s);
 			rset.next();
+			//obsluga bledu
 			gamer.setgID(rset.getInt("gid"));
 			rset.close();
 			sql_stmt.close();
@@ -140,20 +147,140 @@ public class DatabaseConnection
 			return "";
 		}
 	}
+	public void updateResearchColumnInDB(Gamer gamer, DataStorage dataStorage)
+	{
+		if(gamer.getCurrentResearchActionType().contentEquals("S"))
+		{
+			try 
+			{
+				PreparedStatement stmt;
+				stmt = conn.prepareStatement(
+				           "UPDATE GAMERS SET CR_CAT = ?, CR_ID = ?, CR_ENDTIME = ? WHERE GID  =?");
+				stmt.setString(1, gamer.getCurrentResearchCategory());
+				stmt.setInt(2, gamer.getCurrentResearchID());
+				Timestamp timestamp = new Timestamp(gamer.getCurrentResearchTimestamp());
+				stmt.setTimestamp(3, timestamp);
+				stmt.setInt(4, gamer.getgID());
+
+				stmt.executeUpdate();
+			} 
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+		else if(gamer.getCurrentResearchActionType().contentEquals("E"))
+		{
+			try 
+			{
+				PreparedStatement stmt;
+				stmt = getPreparedStatementToUpdateResearchColumn(gamer.getCurrentResearchCategory(), gamer.getCurrentResearchID());
+				
+				stmt.setString(1, dataStorage.getResearchName(gamer.finishCurrentResearch()));
+				stmt.setInt(2, gamer.getgID());
+				stmt.executeUpdate();
+			}
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	private PreparedStatement getPreparedStatementToUpdateResearchColumn(String category, int researchID)
+	{
+		String preparedStatement = "";
+		
+		if(category.contentEquals("A"))
+		{
+			if(researchID<8)
+			{
+				preparedStatement="UPDATE GAMERS SET MISSILE = ?, CR_CAT = null, CR_ID = -1, CR_ENDTIME = null  WHERE GID = ?";
+			}
+			else if(researchID<16)
+			{
+				preparedStatement="UPDATE GAMERS SET ION_CANNON = ?, CR_CAT = null, CR_ID = -1, CR_ENDTIME = null  WHERE GID = ?";
+			}
+			else if(researchID<24)
+			{
+				preparedStatement="UPDATE GAMERS SET PLASMA_GUN = ?, CR_CAT = null, CR_ID = -1, CR_ENDTIME = null  WHERE GID = ?";
+			}
+			else if(researchID<30)
+			{
+				preparedStatement="UPDATE GAMERS SET ARMOR = ?, CR_CAT = null, CR_ID = -1, CR_ENDTIME = null  WHERE GID = ?";
+			}
+			else if(researchID<36)
+			{
+				preparedStatement="UPDATE GAMERS SET SHIELD = ?, CR_CAT = null, CR_ID = -1, CR_ENDTIME = null  WHERE GID = ?";
+			}
+		}
+		else if(category.contentEquals("B"))
+		{
+			if(researchID<8)
+			{
+				preparedStatement="UPDATE GAMERS SET ECM = ?, CR_CAT = null, CR_ID = -1, CR_ENDTIME = null  WHERE GID = ?";
+			}
+			else if(researchID<16)
+			{
+				preparedStatement="UPDATE GAMERS SET ECCM = ?, CR_CAT = null, CR_ID = -1, CR_ENDTIME = null  WHERE GID = ?";
+			}
+		}
+		else if(category.contentEquals("C"))
+		{
+			if(researchID<10)
+			{
+				preparedStatement="UPDATE GAMERS SET SHIP_SIZE = ?, CR_CAT = null, CR_ID = -1, CR_ENDTIME = null  WHERE GID = ?";
+			}
+		}	
+		else if(category.contentEquals("-"))
+		{
+			if(researchID<10)
+			{
+				preparedStatement="UPDATE GAMERS SET RFLEET = ?, CR_CAT = null, CR_ID = -1, CR_ENDTIME = null  WHERE GID = ?";
+			}
+		}	
+		
+		
+		try 
+		{
+			return conn.prepareStatement(preparedStatement);
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public Gamer setResearch(Gamer gamer)
 	{
+		
 		try 
 		{
 			Statement sql_stmt = conn.createStatement();
-			ResultSet rset = sql_stmt.executeQuery("SELECT SHIPS_SIZE, MISSILE, ION_CANNON, PLASMA_GUN, ARMOR, SHIELD, ECM, ECCM, RFLEET FROM GAMERS WHERE GID="+gamer.getgID());
+			ResultSet rset = sql_stmt.executeQuery("SELECT SHIPS_SIZE, MISSILE, ION_CANNON, PLASMA_GUN, ARMOR, SHIELD, ECM, ECCM, RFLEET, " +
+					"CR_CAT, CR_ID, CR_ENDTIME " +
+					"FROM GAMERS WHERE GID="+gamer.getgID());
 			rset.next();
-			String research = rset.getString("SHIPS_SIZE") +
-					rset.getString("MISSILE") + rset.getString("ION_CANNON") + rset.getString("PLASMA_GUN") + 
-					rset.getString("ARMOR") + rset.getString("SHIELD") + 
-					rset.getString("ECM") + rset.getString("ECCM") +
-					rset.getString("RFLEET");
-			gamer.setResearch(research);
-		} 
+
+			GamerResearch research;
+			research = new GamerResearch(rset.getString("SHIPS_SIZE"), 
+					rset.getString("MISSILE"), rset.getString("ION_CANNON"), rset.getString("PLASMA_GUN"),
+					rset.getString("ARMOR"), rset.getString("SHIELD"), 
+					rset.getString("ECM"), rset.getString("ECCM"),
+					rset.getInt("RFLEET"));
+			
+			String category = rset.getString("CR_CAT");
+			
+			if(category==null)
+			{
+				research.setCurrentResearch("", -1, new Date(0));
+			}
+			else
+			{
+				Timestamp o = rset.getTimestamp("CR_ENDTIME");
+				research.setCurrentResearch(rset.getString("CR_CAT"), rset.getInt("CR_ID"), new Date(o.getTime()));
+				gamer.setResearchState(research);
+			}
+		}
 		catch (SQLException e) 
 		{
 			e.printStackTrace();

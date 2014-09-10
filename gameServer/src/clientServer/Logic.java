@@ -49,6 +49,27 @@ public class Logic implements Runnable
 				String os = connection.readOS();
 				connection.launcherRequestForFile(update, os);
 			}
+			else if(command.equals("RRS"))	//obsluga zapytania o stan badan technologicznych
+			{
+				connection.sendResearchState(gamer.getResearchState());
+			}
+			else if(command.equals("CRS"))
+			{
+				connection.sendCurrentResearchState(gamer.getCurrentResearchState());
+			}
+			else if(command.equals("SCR"))
+			{
+				gamer = connection.readCurrentResearch(gamer, dataStorage);
+				connection.sendCurrentResearchState(gamer.getCurrentResearchActionType());
+				if(gamer.getCurrentResearchActionType().length()==1)
+				{
+					dbConnection.updateResearchColumnInDB(gamer, dataStorage);
+				}
+				else
+				{
+					gamer.resetCurrentActionAfterError();
+				}
+			}
 			else if(command.equals("LGT"))	//wylogowanie
 			{
 				break;

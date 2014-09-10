@@ -3,6 +3,8 @@ package clientServer;
 import java.net.*;
 import java.io.*;
 
+import data.DataStorage;
+
 import object.Gamer;
 
 import main.*;
@@ -121,6 +123,16 @@ public class Connection
 	{
 		return read();
 	}
+	/**Metoda odpowiedzialna za wyslanie stanu badan do klienta */
+	public void sendResearchState(String researchState)
+	{
+		writeText(researchState, researchState.length());
+	}
+	/**Metoda odpowiedzialna za wyslanie stanu aktualnie badanej technologii  do klienta */
+	public void sendCurrentResearchState(String researchState)
+	{
+		writeText(researchState, researchState.length());
+	}
 	/**Metoda odpowiedzialna za pobranie od klienta informacji o systemie*/
 	public String readOS()
 	{
@@ -153,6 +165,84 @@ public class Connection
 		gamer.setPassword(read());
 		return gamer;
 	}
+	/**Metoda odpowiedzialna za wczytanie danych o aktualnie prowadzonym badaniu od klienta
+	 * @param dataStorage */
+	public Gamer readCurrentResearch(Gamer gamer, DataStorage dataStorage)
+	{
+		String readResearch = read();
+		
+		String type = readResearch.substring(0, 1);
+		String category = readResearch.substring(1, 2);
+		int researchId = Integer.parseInt(readResearch.substring(2));
+		int timeToFinish = 0;
+		if(category.contentEquals("A"))
+		{
+			dataStorage.getResearchTime(researchId);
+		}
+		else if(category.contentEquals("B"))
+		{
+			dataStorage.getResearchTime(researchId+36);
+		}
+		else if(category.contentEquals("C"))
+		{
+			dataStorage.getResearchTime(researchId+52);
+		}
+		else if(category.contentEquals("-"))
+		{
+			if(researchId==1)
+	        {
+				dataStorage.getResearchTime(12);
+	        }
+	        else if(researchId==2)
+	        {
+	        	dataStorage.getResearchTime(24);
+	        }
+	        else if(researchId==3)
+	        {
+	        	dataStorage.getResearchTime(48);
+	        }
+	        else if(researchId==4)
+	        {
+	        	dataStorage.getResearchTime(96);
+	        }
+	        else if(researchId==5)
+	        {
+	        	dataStorage.getResearchTime(144);
+	        }
+	        else if(researchId==6)
+	        {
+	        	dataStorage.getResearchTime(240);
+	        }
+	        else if(researchId==7)
+	        {
+	        	dataStorage.getResearchTime(384);
+	        }
+	        else if(researchId==8)
+	        {
+	        	dataStorage.getResearchTime(624);
+	        }
+	        else if(researchId==9)
+	        {
+	        	dataStorage.getResearchTime(1008);
+	        }
+		}
+		gamer.setResearchState(type, category, researchId, timeToFinish);
+		return gamer;
+	}
+	/**Metoda odpowiedzialna za wyslanie informacje czy aktualnie prowadzone badanie zostalo zakonczone/zostalo zapisane w pamieci*/
+	public void sendCurrentResearchState(Boolean state)
+	{
+		if(state)
+		{
+			writeText("T", 1);
+		}
+		else
+		{
+			writeText("N", 1);
+		}
+	}
+	
+	
 	/**Metoda odpowiedzialna za wyslanie informacji do klienta o tym czy dany gracz poprawnie sie zalogowal*/
 	public void writerGamerState(Gamer gamer)
 	{

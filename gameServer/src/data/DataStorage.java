@@ -218,6 +218,14 @@ public class DataStorage
 				maxShipHP, maxShipAP, maxShipSP);
 		return shipToReturn;
 	}
+	public int getResearchTime(int i)
+	{
+		return listOfObjectData.get(i).getTime();
+	}
+	public String getResearchName(int i)
+	{
+		return listOfObjectData.get(i).getName();
+	}
 	private void interpretLineOfObjectData(String data, int type)
 	{
 		String[] parts = data.split("\t");

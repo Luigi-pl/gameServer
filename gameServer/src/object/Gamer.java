@@ -29,7 +29,7 @@ public class Gamer
 	{
 		return login;
 	}
-	/** Metoda zwracajaca haslo zahashowane (sha3-512)*/
+	/** Metoda zwracajaca haslo zahashowane (sha512)*/
 	public String getPassword() 
 	{
 		return password;
@@ -67,8 +67,44 @@ public class Gamer
 		}
 	}
 	/** */
-	public void setResearch(String research)
+	public void setResearchState(GamerResearch research)
 	{
-		this.research = new GamerResearch(research);
+		this.research = research;
+	}
+	public String getResearchState()
+	{
+		return this.research.getResearchState();
+	}
+	public String getCurrentResearchState()
+	{
+		return this.research.getCurrentResearchState();
+	}
+	public void setResearchState(String type, String category, int researchId, int timeToFinish)
+	{
+		this.research.setCurrentResearch(type, category, researchId, timeToFinish);
+	}
+	public String getCurrentResearchActionType()
+	{
+		return this.research.getCurrentResearchActionType();
+	}
+	public String getCurrentResearchCategory() 
+	{
+		return this.research.getCurrentResearchCategory();
+	}
+	public int getCurrentResearchID()
+	{
+		return this.research.getCurrentResearchID();
+	}
+	public long getCurrentResearchTimestamp()
+	{
+		return this.research.getCurrentResearchTimestamp();
+	}
+	public int finishCurrentResearch()
+	{
+		return this.research.finishCurrentResearch();
+	}
+	public void resetCurrentActionAfterError()
+	{
+		this.research.resetCurrentActionAfterError();
 	}
 }
