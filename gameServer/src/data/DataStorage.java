@@ -224,7 +224,7 @@ public class DataStorage
 	}
 	public String getResearchName(int i)
 	{
-		return listOfObjectData.get(i).getName();
+		return listOfObjectData.get(i).getID();
 	}
 	private void interpretLineOfObjectData(String data, int type)
 	{

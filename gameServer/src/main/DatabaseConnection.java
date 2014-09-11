@@ -175,8 +175,14 @@ public class DatabaseConnection
 			{
 				PreparedStatement stmt;
 				stmt = getPreparedStatementToUpdateResearchColumn(gamer.getCurrentResearchCategory(), gamer.getCurrentResearchID());
-				
-				stmt.setString(1, dataStorage.getResearchName(gamer.finishCurrentResearch()));
+				if(gamer.getCurrentResearchCategory().contentEquals("-"))
+				{
+					stmt.setString(1, Integer.toString(gamer.getCurrentResearchID()));
+				}
+				else
+				{
+					stmt.setString(1, dataStorage.getResearchName(gamer.finishCurrentResearch()));
+				}
 				stmt.setInt(2, gamer.getgID());
 				stmt.executeUpdate();
 			}
@@ -268,18 +274,18 @@ public class DatabaseConnection
 					rset.getString("ECM"), rset.getString("ECCM"),
 					rset.getInt("RFLEET"));
 			
-			String category = rset.getString("CR_CAT");
+			int crID = rset.getInt("CR_ID");
 			
-			if(category==null)
+			if(crID==-1)
 			{
 				research.setCurrentResearch("", -1, new Date(0));
 			}
 			else
 			{
 				Timestamp o = rset.getTimestamp("CR_ENDTIME");
-				research.setCurrentResearch(rset.getString("CR_CAT"), rset.getInt("CR_ID"), new Date(o.getTime()));
-				gamer.setResearchState(research);
+				research.setCurrentResearch(rset.getString("CR_CAT"), crID, new Date(o.getTime()));
 			}
+			gamer.setResearchState(research);
 		}
 		catch (SQLException e) 
 		{

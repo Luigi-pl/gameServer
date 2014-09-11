@@ -175,57 +175,59 @@ public class Connection
 		String category = readResearch.substring(1, 2);
 		int researchId = Integer.parseInt(readResearch.substring(2));
 		int timeToFinish = 0;
+		
 		if(category.contentEquals("A"))
 		{
-			dataStorage.getResearchTime(researchId);
+			timeToFinish=dataStorage.getResearchTime(researchId);
 		}
 		else if(category.contentEquals("B"))
 		{
-			dataStorage.getResearchTime(researchId+36);
+			timeToFinish=dataStorage.getResearchTime(researchId+36);
 		}
 		else if(category.contentEquals("C"))
 		{
-			dataStorage.getResearchTime(researchId+52);
+			timeToFinish=dataStorage.getResearchTime(researchId+52);
 		}
 		else if(category.contentEquals("-"))
 		{
 			if(researchId==1)
 	        {
-				dataStorage.getResearchTime(12);
+				timeToFinish=(12);
 	        }
 	        else if(researchId==2)
 	        {
-	        	dataStorage.getResearchTime(24);
+	        	timeToFinish=(24);
 	        }
 	        else if(researchId==3)
 	        {
-	        	dataStorage.getResearchTime(48);
+	        	timeToFinish=(48);
 	        }
 	        else if(researchId==4)
 	        {
-	        	dataStorage.getResearchTime(96);
+	        	timeToFinish=(96);
 	        }
 	        else if(researchId==5)
 	        {
-	        	dataStorage.getResearchTime(144);
+	        	timeToFinish=(144);
 	        }
 	        else if(researchId==6)
 	        {
-	        	dataStorage.getResearchTime(240);
+	        	timeToFinish=(240);
 	        }
 	        else if(researchId==7)
 	        {
-	        	dataStorage.getResearchTime(384);
+	        	timeToFinish=(384);
 	        }
 	        else if(researchId==8)
 	        {
-	        	dataStorage.getResearchTime(624);
+	        	timeToFinish=(624);
 	        }
 	        else if(researchId==9)
 	        {
-	        	dataStorage.getResearchTime(1008);
+	        	timeToFinish=(1008);
 	        }
 		}
+		
 		gamer.setResearchState(type, category, researchId, timeToFinish);
 		return gamer;
 	}

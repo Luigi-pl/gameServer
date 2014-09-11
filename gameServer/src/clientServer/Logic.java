@@ -51,6 +51,7 @@ public class Logic implements Runnable
 			}
 			else if(command.equals("RRS"))	//obsluga zapytania o stan badan technologicznych
 			{
+				
 				connection.sendResearchState(gamer.getResearchState());
 			}
 			else if(command.equals("CRS"))

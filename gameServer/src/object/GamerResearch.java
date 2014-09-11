@@ -48,6 +48,7 @@ public class GamerResearch
 		if(crID==-1)
 		{
 			this.crActionType="D";
+			this.crID=-1;
 		}
 		else
 		{
