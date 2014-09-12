@@ -6,6 +6,7 @@ public class Gamer
 	private String login;
 	private String password;
 	private GamerResearch research;
+	private Fleet fleet;
 	
 	public Gamer() 
 	{
@@ -71,6 +72,10 @@ public class Gamer
 	{
 		this.research = research;
 	}
+	public void setFleet(Fleet fleet)
+	{
+		this.fleet = fleet;
+	}
 	public String getResearchState()
 	{
 		return this.research.getResearchState();
@@ -106,5 +111,13 @@ public class Gamer
 	public void resetCurrentActionAfterError()
 	{
 		this.research.resetCurrentActionAfterError();
+	}
+	public int getFleetSize()
+	{
+		return fleet.getFleetSize();
+	}
+	public String getFleetInformation() 
+	{
+		return fleet.getFleetInformation();
 	}
 }

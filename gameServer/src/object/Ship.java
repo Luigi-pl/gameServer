@@ -28,8 +28,6 @@ public class Ship
 			    this.curShipAP=maxShipAP;
 			    this.curShipSP=maxShipSP;
 		    }
-
-
 			public int getSquadronHPAttackPoints()
 		    {
 		    	return ((int) (Math.floor(curShipHP/actShipSize/100)) * HPTakenPerAttackPerShip * attackModifierFromShipType);
@@ -124,7 +122,16 @@ public class Ship
 			{
 				return shipTypeID;
 			}
+			public void setAsDBObject(String asDBObject)
+			{
+				this.asDBObject = asDBObject;
+			}
+			public String getAsDBObject()
+			{
+				return asDBObject;
+			}
 			
+			private String asDBObject;
 			
 			private String shipTypeID;
 			/***/

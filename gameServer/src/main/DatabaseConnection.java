@@ -11,6 +11,7 @@ import java.util.Date;
 
 import data.DataStorage;
 
+import object.Fleet;
 import object.Gamer;
 import object.GamerResearch;;
 
@@ -62,14 +63,12 @@ public class DatabaseConnection
 	 * */
 	public Gamer setGamerGID(Gamer gamer)
 	{
-		String s;
 		try 
 		{
 			Statement sql_stmt = conn.createStatement();
-			s="SELECT gid FROM gamers WHERE LOGIN='" + gamer.getLogin() + "' and PASS='" + gamer.getPassword() + "'";
-			ResultSet rset = sql_stmt.executeQuery(s);
+			
+			ResultSet rset = sql_stmt.executeQuery("SELECT gid FROM gamers WHERE LOGIN='"+gamer.getLogin()+"' and PASS='"+gamer.getPassword()+"'");
 			rset.next();
-			//obsluga bledu
 			gamer.setgID(rset.getInt("gid"));
 			rset.close();
 			sql_stmt.close();
@@ -98,7 +97,6 @@ public class DatabaseConnection
 			}
 			rset.close();
 			sql_stmt.close();
-			//System.out.println(s);
 			return s;
 		} 
 		catch (SQLException e) 
@@ -123,8 +121,12 @@ public class DatabaseConnection
 			path="";
 			file_name="";
 			ret="";
+
+
 			Statement sql_stmt = conn.createStatement();
-			ResultSet rset = sql_stmt.executeQuery("SELECT PATH, FILE_NAME FROM FILE_UPDATE_"+system+" WHERE ID_NUMBER='"+ idNumber +"'");
+
+			
+			ResultSet rset = sql_stmt.executeQuery("SELECT PATH, FILE_NAME FROM FILE_UPDATE_"+system+" WHERE ID_NUMBER='"+idNumber+"'");
 			rset.next();
 			path=rset.getString("path");
 			file_name=rset.getString("file_name");
@@ -261,10 +263,12 @@ public class DatabaseConnection
 		
 		try 
 		{
-			Statement sql_stmt = conn.createStatement();
-			ResultSet rset = sql_stmt.executeQuery("SELECT SHIPS_SIZE, MISSILE, ION_CANNON, PLASMA_GUN, ARMOR, SHIELD, ECM, ECCM, RFLEET, " +
-					"CR_CAT, CR_ID, CR_ENDTIME " +
-					"FROM GAMERS WHERE GID="+gamer.getgID());
+			PreparedStatement sql_stmt = conn.prepareStatement("SELECT SHIPS_SIZE, MISSILE, ION_CANNON, PLASMA_GUN, ARMOR, SHIELD, ECM, ECCM, RFLEET, " +
+					"CR_CAT, CR_ID, CR_ENDTIME FROM GAMERS WHERE GID= ?");
+			sql_stmt.setInt(1, gamer.getgID());
+			
+			
+			ResultSet rset = sql_stmt.executeQuery();
 			rset.next();
 
 			GamerResearch research;
@@ -286,6 +290,43 @@ public class DatabaseConnection
 				research.setCurrentResearch(rset.getString("CR_CAT"), crID, new Date(o.getTime()));
 			}
 			gamer.setResearchState(research);
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		return gamer;
+	}
+	public Gamer setFleet(Gamer gamer, DataStorage dataStorage) 
+	{
+		try 
+		{
+			PreparedStatement sql_stmt = conn.prepareStatement("SELECT NAME, LEV, EXPERIENCE, ATTACK_SKILL, DEFENSE_SKILL, FLEET_NAME, " +
+					"SHIP_0, SHIP_1, SHIP_2, SHIP_3, SHIP_4, SHIP_5, SHIP_6, SHIP_7, SHIP_8, SHIP_9 FROM ADMIRALS WHERE GID= ?");
+			sql_stmt.setInt(1, gamer.getgID());
+			ResultSet rset = sql_stmt.executeQuery();
+			rset.next();
+			
+		
+			Fleet fleet = new Fleet(rset.getString("NAME"), rset.getString("FLEET_NAME"), 
+					rset.getInt("LEV"), rset.getInt("EXPERIENCE"), rset.getInt("ATTACK_SKILL"), rset.getInt("DEFENSE_SKILL"), 0);
+			fleet.addShip(dataStorage.returnShip(rset.getString("SHIP_0")));
+			
+			String shipFromDB;
+			for(int i=0; i<9; i++)
+			{
+				shipFromDB=rset.getString(i+8);
+				if(shipFromDB==null)
+				{
+					break;
+				}
+				else
+				{
+					fleet.makeFleetBigger();
+					fleet.addShip(dataStorage.returnShip(shipFromDB));
+				}
+			}
+			gamer.setFleet(fleet);
 		}
 		catch (SQLException e) 
 		{

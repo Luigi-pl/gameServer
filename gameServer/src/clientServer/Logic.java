@@ -38,7 +38,11 @@ public class Logic implements Runnable
 				gamer = connection.readGamer(gamer);	//pobranie informacji wyslanych przez gracza
 				gamer = dbConnection.setGamerGID(gamer);	//odnalezienie gracza w bazie
 				connection.writerGamerState(gamer);	//wyslanie graczowi informacji o powodzeniu logowania
-				gamer = dbConnection.setResearch(gamer); //
+				if(gamer.checkGID().contentEquals("T"))
+				{
+					gamer = dbConnection.setResearch(gamer); //pobranie z bazy danych informacji o badaniach
+					gamer = dbConnection.setFleet(gamer, dataStorage); //pobranie z bazy danych informacji o flocie
+				}
 			}
 			else if(command.equals("RUI"))	//obsluga informacji o plikach do zupdate'owania
 			{
@@ -49,16 +53,15 @@ public class Logic implements Runnable
 				String os = connection.readOS();
 				connection.launcherRequestForFile(update, os);
 			}
-			else if(command.equals("RRS"))	//obsluga zapytania o stan badan technologicznych
+			else if(command.equals("RRS"))	//obsluga zapytania o stan wszystkich badan technologicznych
 			{
-				
 				connection.sendResearchState(gamer.getResearchState());
 			}
-			else if(command.equals("CRS"))
+			else if(command.equals("CRS"))	//obsluga zapytania o stan aktualnie badanego
 			{
 				connection.sendCurrentResearchState(gamer.getCurrentResearchState());
 			}
-			else if(command.equals("SCR"))
+			else if(command.equals("SCR"))	//obsluga komendy konczacej/zaczynajace badanie
 			{
 				gamer = connection.readCurrentResearch(gamer, dataStorage);
 				connection.sendCurrentResearchState(gamer.getCurrentResearchActionType());
@@ -70,6 +73,10 @@ public class Logic implements Runnable
 				{
 					gamer.resetCurrentActionAfterError();
 				}
+			}
+			else if(command.equals("RFI"))
+			{
+				connection.sendFleetInformation(gamer.getFleetInformation());
 			}
 			else if(command.equals("LGT"))	//wylogowanie
 			{

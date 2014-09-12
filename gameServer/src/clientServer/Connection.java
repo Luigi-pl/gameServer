@@ -128,6 +128,11 @@ public class Connection
 	{
 		writeText(researchState, researchState.length());
 	}
+	/**Metoda odpowiedzialna za wyslanie informacji o flocie do klienta */
+	public void sendFleetInformation(String fleet)
+	{
+		writeText(fleet, fleet.length());
+	}
 	/**Metoda odpowiedzialna za wyslanie stanu aktualnie badanej technologii  do klienta */
 	public void sendCurrentResearchState(String researchState)
 	{

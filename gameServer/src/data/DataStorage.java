@@ -216,6 +216,7 @@ public class DataStorage
 				ownAccuracyModifier, enemyAccuracyModifier, 
 				HPTakenPerAttackPerShip, APTakenPerAttackPerShip, SPTakenPerAttackPerShip, 
 				maxShipHP, maxShipAP, maxShipSP);
+		shipToReturn.setAsDBObject(ship);
 		return shipToReturn;
 	}
 	public int getResearchTime(int i)
