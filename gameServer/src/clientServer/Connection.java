@@ -131,7 +131,7 @@ public class Connection
 	/**Metoda odpowiedzialna za wyslanie informacji o flocie do klienta */
 	public void sendFleetInformation(String fleet)
 	{
-		writeText(fleet, fleet.length());
+		writeText(fleet, fleet.length());		
 	}
 	/**Metoda odpowiedzialna za wyslanie stanu aktualnie badanej technologii  do klienta */
 	public void sendCurrentResearchState(String researchState)
@@ -349,5 +349,12 @@ public class Connection
         {
 			e.printStackTrace();
 		}
+	}
+
+	public void sendShipInformation(Gamer gamer) 
+	{
+		int i = Integer.parseInt(read());
+		String ship = gamer.getDBObjectInformation(i);
+		writeText(ship, ship.length());
 	}
 }

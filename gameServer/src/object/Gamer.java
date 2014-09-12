@@ -120,4 +120,8 @@ public class Gamer
 	{
 		return fleet.getFleetInformation();
 	}
+	public String getDBObjectInformation(int i)
+	{
+		return fleet.getShipDBObjectInformation(i);
+	}
 }

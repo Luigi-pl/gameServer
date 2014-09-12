@@ -65,18 +65,22 @@ public class Logic implements Runnable
 			{
 				gamer = connection.readCurrentResearch(gamer, dataStorage);
 				connection.sendCurrentResearchState(gamer.getCurrentResearchActionType());
-				if(gamer.getCurrentResearchActionType().length()==1)
+				if(gamer.getCurrentResearchActionType().length()==1)	//komenda ma sens
 				{
 					dbConnection.updateResearchColumnInDB(gamer, dataStorage);
 				}
-				else
+				else //komenda zakonczyla sie bledem
 				{
 					gamer.resetCurrentActionAfterError();
 				}
 			}
-			else if(command.equals("RFI"))
+			else if(command.equals("RFI"))	//obsluga komendy pobierajacej informacje ogolne o flocie
 			{
 				connection.sendFleetInformation(gamer.getFleetInformation());
+			}
+			else if(command.equals("RSI"))	//obsluga komendy pobierajacej informacje o pojedynczym okrecie
+			{
+				connection.sendShipInformation(gamer);
 			}
 			else if(command.equals("LGT"))	//wylogowanie
 			{
